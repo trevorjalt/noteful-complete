@@ -46,7 +46,7 @@ class App extends Component {
     // pass along and check syntax
     handleAddFolder = folder => {
         this.setState({
-            folders: [...this.folders, folder]
+            folders: [...this.state.folders, folder]
         })
     }
 
@@ -89,7 +89,8 @@ class App extends Component {
         const value = {
             notes: this.state.notes,
             folders: this.state.folders,
-            deleteNote: this.handleDeleteNote
+            deleteNote: this.handleDeleteNote,
+            addFolder: this.handleAddFolder
         };
         return (
             <ApiContext.Provider value={value}>

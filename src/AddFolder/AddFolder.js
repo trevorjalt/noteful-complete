@@ -1,34 +1,58 @@
 import React from 'react';
 import './AddFolder.css';
+import ApiContext from '../ApiContext';
+import config from '../config';
 
 
 import '../NoteListNav/NoteListNav.css'
 
 
 class AddFolder extends React.Component {
-    // static contextType = ApiContext;
+    static contextType = ApiContext;
 
-    // handleClickAddFolder = (name) => {
-    //     name.preventDefault()
-    //     let newId =
-    // }
+    handleClickAddFolder = (event) => {
+        event.preventDefault()
+        console.log(event.target.name.value)
+        let folderName = event.target.name.value
+        let newFolder = JSON.stringify({
+            name: folderName
+        })
+
+        fetch(`${config.API_ENDPOINT}/folders`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: newFolder
+        })
+        .then(res => {
+            if (!res.ok)
+              return res.json().then(e => Promise.reject(e))
+            return res.json()
+          })
+        .then(res => {
+            console.log(res)
+            this.context.addFolder(folderName)
+            // this.props.history.push('/')
+        })
+        .catch(error => {
+            console.error({ error })
+          })
+    }
 
     render() {
         return (
            
-            <form className="add-folder-form" onSubmit={e => this.handleSubmit(e)}>
+            <form className="add-folder-form" onSubmit={e => this.handleClickAddFolder(e)}>
                 <h2>Create a folder</h2>
                 <div className="folder-form">
                     <label htmlFor="name">Name</label>
                     <input
                         type="text"
-                        className="registration__control"
                         name="name"
                         id="name"
-                        onChange={e => this.updateName(e.target.value)}
+                        // onChange={e => this.handleClickAddFolder.target.value)}
                     />
                     <div className="add-button">
-                        <button>Add Folder</button>
+                        <button type="submit">Add Folder</button>
                     </div>
                 </div>
             </form>
