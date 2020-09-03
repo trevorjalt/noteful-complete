@@ -24,9 +24,12 @@ class AddNote extends React.Component {
                     <textarea
                         type="text"
                         name="content"
-                        id="content"
-                        
+                        id="content"  
                     />
+                    <label htmlFor="folder-name">Folder</label>
+                    <select name="folder-name" id="folder-name">
+                        <option value="...">...</option>
+                    </select>
                     <div className="add-button">
                    
                         <button type="submit">Add Note</button>
