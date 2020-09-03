@@ -48,6 +48,8 @@ class App extends Component {
         this.setState({
             folders: [...this.state.folders, folder]
         })
+        console.log(this.state)
+        this.render()
     }
 
     renderNavRoutes() {

@@ -30,8 +30,8 @@ class AddFolder extends React.Component {
           })
         .then(res => {
             console.log(res)
-            this.context.addFolder(folderName)
-            // this.props.history.push('/')
+            this.context.addFolder(res)
+            this.props.history.push('/')
         })
         .catch(error => {
             console.error({ error })
