@@ -1,5 +1,6 @@
 import React from 'react';
-import CircleButton from '../CircleButton/CircleButton';
+import './AddFolder.css';
+
 
 import '../NoteListNav/NoteListNav.css'
 
@@ -15,20 +16,20 @@ class AddFolder extends React.Component {
     render() {
         return (
            
-            <form className="Noteful-form" onSubmit={e => this.handleSubmit(e)}>
+            <form className="add-folder-form" onSubmit={e => this.handleSubmit(e)}>
                 <h2>Create a folder</h2>
                 <div className="folder-form">
-                <label htmlFor="name">Name</label>
-                <input
-                    type="text"
-                    className="registration__control"
-                    name="name"
-                    id="name"
-                    onChange={e => this.updateName(e.target.value)}
-                />
-                </div>
-                <div className="add-button">
-                    <button>Add Folder</button>
+                    <label htmlFor="name">Name</label>
+                    <input
+                        type="text"
+                        className="registration__control"
+                        name="name"
+                        id="name"
+                        onChange={e => this.updateName(e.target.value)}
+                    />
+                    <div className="add-button">
+                        <button>Add Folder</button>
+                    </div>
                 </div>
             </form>
         )
