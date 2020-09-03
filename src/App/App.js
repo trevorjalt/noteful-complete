@@ -5,6 +5,7 @@ import NoteListNav from '../NoteListNav/NoteListNav';
 import NotePageNav from '../NotePageNav/NotePageNav';
 import NoteListMain from '../NoteListMain/NoteListMain';
 import NotePageMain from '../NotePageMain/NotePageMain';
+import AddFolder from '../AddFolder/AddFolder';
 import ApiContext from '../ApiContext';
 import config from '../config';
 import './App.css';
@@ -42,6 +43,13 @@ class App extends Component {
         });
     };
 
+    // pass along and check syntax
+    handleAddFolder = folder => {
+        this.setState({
+            folders: [...this.folders, folder]
+        })
+    }
+
     renderNavRoutes() {
         return (
             <>
@@ -72,6 +80,7 @@ class App extends Component {
                     />
                 ))}
                 <Route path="/note/:noteId" component={NotePageMain} />
+                <Route path="/add-folder" component={AddFolder} />
             </>
         );
     }
