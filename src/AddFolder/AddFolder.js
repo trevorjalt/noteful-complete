@@ -1,6 +1,8 @@
 import React from 'react';
 import './AddFolder.css';
 import ApiContext from '../ApiContext';
+import ValidationError from '../ValidationError';
+import PropTypes from 'prop-types';
 import config from '../config';
 
 
@@ -10,9 +12,24 @@ import '../NoteListNav/NoteListNav.css'
 class AddFolder extends React.Component {
     static contextType = ApiContext;
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            name: {
+                value: '',
+                touched: false,
+            }   
+        }
+    }
+
+    updateFolderName(name) {
+        this.setState({ 
+            name: { value: name, touched: true} 
+        })
+    }
+
     handleClickAddFolder = (event) => {
         event.preventDefault()
-        console.log(event.target.name.value)
         let folderName = event.target.name.value
         let newFolder = JSON.stringify({
             name: folderName
@@ -29,7 +46,6 @@ class AddFolder extends React.Component {
             return res.json()
           })
         .then(res => {
-            console.log(res)
             this.context.addFolder(res)
             this.props.history.push('/')
         })
@@ -38,7 +54,17 @@ class AddFolder extends React.Component {
           })
     }
 
+    validateFolderName() {
+        const newFolderName = this.state.name.value.trim();
+        if(newFolderName.length < 1) {
+            return 'Your folder needs a name!'
+        }
+    }
+    
+
     render() {
+        const nameError = this.validateFolderName();
+
         return (
            
             <form className="add-folder-form" onSubmit={e => this.handleClickAddFolder(e)}>
@@ -49,10 +75,16 @@ class AddFolder extends React.Component {
                         type="text"
                         name="name"
                         id="name"
-                        // onChange={e => this.handleClickAddFolder.target.value)}
+                        onChange={e => this.updateFolderName(e.target.value)}
                     />
+                    {this.state.name.touched && <ValidationError message={nameError} />}
                     <div className="add-button">
-                        <button type="submit">Add Folder</button>
+                        <button 
+                        type="submit"
+                        disabled={
+                            this.validateFolderName()
+                        }>
+                            Add Folder</button>
                     </div>
                 </div>
             </form>
@@ -60,4 +92,10 @@ class AddFolder extends React.Component {
     }
 }
 
+
 export default AddFolder
+
+
+AddFolder.propTypes = {
+    history: PropTypes.object
+}

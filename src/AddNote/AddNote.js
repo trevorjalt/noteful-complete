@@ -2,6 +2,8 @@ import React from 'react';
 import './AddNote.css';
 import ApiContext from '../ApiContext';
 import config from '../config';
+import ValidationError from '../ValidationError';
+import PropTypes from 'prop-types';
 
 
 import '../NoteListNav/NoteListNav.css'
@@ -9,12 +11,35 @@ import '../NoteListNav/NoteListNav.css'
 class AddNote extends React.Component {
     static contextType = ApiContext;
 
+    constructor(props) {
+        super(props)
+        this.state = {
+            name: {
+                value: '',
+                touched: false,
+            },
+            content: {
+                value: '',
+                touched: false,
+            }
+        }
+    }
+
+    updateNoteName(name) {
+        this.setState({ 
+            name: { value: name, touched: true} 
+        })
+    }
+
+    updateNoteContent(content) {
+        this.setState({ 
+            content: { value: content, touched: true} 
+        })
+    }
+
     handleClickAddNote = (event) => {
         event.preventDefault()
-        // console.log(event.currentTarget)
-        // console.log(event.target.name.value)
-        // console.log(event.target.content.value)
-        // console.log(event.target['folder-name'].id)
+
         let noteName = event.target.name.value
         let noteContent= event.target.content.value
         let selectedFolder = event.target['folder-name'].value
@@ -36,7 +61,6 @@ class AddNote extends React.Component {
             return res.json()
           })
         .then(res => {
-            console.log(res)
             this.context.addNote(res)
             this.props.history.push('/')
         })
@@ -45,9 +69,28 @@ class AddNote extends React.Component {
           })
     }
 
+    validateNoteName() {
+        const newNoteName = this.state.name.value.trim();
+        if(newNoteName.length < 1) {
+            return 'Your note needs a name!'
+        }
+    }
+
+    validateNoteContent() {
+        const updateNoteContent = this.state.content.value.trim();
+        if (updateNoteContent.length < 3) {
+            return 'Lets give this note a little more content! At least 3 characters will do!'
+        }
+    }
+
     render(){
+        console.log(this.props)
         const { folders=[] } = this.context
+        const nameError = this.validateNoteName();
+        const contentError = this.validateNoteContent();
+
         return(
+           
             <form className="add-note-form" onSubmit={e => this.handleClickAddNote(e)}>
                 <h2>Create a Note</h2>
                 <div className="note-form">
@@ -56,14 +99,17 @@ class AddNote extends React.Component {
                         type="text"
                         name="name"
                         id="name"
-                        // onChange={e => this.handleClickAddFolder.target.value)}
+                        onChange={e => this.updateNoteName(e.target.value)}
                     />
+                    {this.state.name.touched && <ValidationError message={nameError} />}
                     <label htmlFor="content">Content</label>
                     <textarea
                         type="text"
                         name="content"
-                        id="content"  
+                        id="content" 
+                        onChange={e => this.updateNoteContent(e.target.value)} 
                     />
+                    {this.state.content.touched && <ValidationError message={contentError} />}
                     <label htmlFor="folder-name">Folder</label>
                     <select name="folder-name" id="folder-name">
                         <option value="...">...</option>
@@ -71,13 +117,27 @@ class AddNote extends React.Component {
                         <option key={folder.id} name={folder.id} value={folder.id}>{folder.name}</option>)}
                     </select>
                     <div className="add-button">
-                   
-                        <button type="submit">Add Note</button>
+                        <button 
+                            type="submit"
+                            disabled={
+                                this.validateNoteName() ||
+                                this.validateNoteContent()
+                            }
+                            >Add Note</button>
+
                     </div>
                 </div>
             </form>
         )
     }
 }
+
+
 export default AddNote
-    
+
+
+AddNote.propTypes = {
+    history: PropTypes.object
+}
+
+

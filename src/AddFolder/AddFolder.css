@@ -31,3 +31,8 @@ button {
     color: lightgray;
     font-size: 1.3rem
 }
+
+.error {
+    color: red;
+    margin-bottom: 2vw;
+}
