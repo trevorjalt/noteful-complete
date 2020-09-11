@@ -23,6 +23,8 @@ class AddNote extends React.Component {
                 touched: false,
             }
         }
+        this.name = React.createRef();
+        this.content= React.createRef();
     }
 
     updateNoteName(name) {
@@ -99,17 +101,29 @@ class AddNote extends React.Component {
                         type="text"
                         name="name"
                         id="name"
+                        aria-required="true"
+                        aria-describedby="errorMessageName"
+                        aria-label="Enter a note name"
+                        ref={this.name}
                         onChange={e => this.updateNoteName(e.target.value)}
                     />
+                    <div id="errorMessageName">
                     {this.state.name.touched && <ValidationError message={nameError} />}
+                    </div>
                     <label htmlFor="content">Content</label>
                     <textarea
                         type="text"
                         name="content"
                         id="content" 
+                        aria-required="true"
+                        aria-describedby="errorMessageContent"
+                        aria-label="Enter some content for your note"
+                        ref={this.content}
                         onChange={e => this.updateNoteContent(e.target.value)} 
                     />
+                    <div id="errorMessageContent">
                     {this.state.content.touched && <ValidationError message={contentError} />}
+                    </div>
                     <label htmlFor="folder-name">Folder</label>
                     <select name="folder-name" id="folder-name">
                         <option value="...">...</option>

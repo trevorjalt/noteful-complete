@@ -20,6 +20,7 @@ class AddFolder extends React.Component {
                 touched: false,
             }   
         }
+        this.name = React.createRef();
     }
 
     updateFolderName(name) {
@@ -75,9 +76,15 @@ class AddFolder extends React.Component {
                         type="text"
                         name="name"
                         id="name"
+                        aria-required="true"
+                        aria-describedby="errorMessage"
+                        aria-label="Enter a new folder name"
+                        ref={this.name}
                         onChange={e => this.updateFolderName(e.target.value)}
                     />
+                    <div id="errorMessage">
                     {this.state.name.touched && <ValidationError message={nameError} />}
+                    </div>
                     <div className="add-button">
                         <button 
                         type="submit"
